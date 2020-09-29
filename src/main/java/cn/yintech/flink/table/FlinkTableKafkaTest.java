@@ -1,4 +1,4 @@
-package cn.yintech.table;
+package cn.yintech.flink.table;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;

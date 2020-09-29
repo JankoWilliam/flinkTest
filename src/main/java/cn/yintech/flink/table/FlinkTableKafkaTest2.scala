@@ -1,4 +1,4 @@
-package cn.yintech.table
+package cn.yintech.flink.table
 
 import java.io.Serializable
 import java.sql.Timestamp
@@ -43,11 +43,12 @@ object FlinkTableKafkaTest2 {
     properties.setProperty("group.id", "LiveVisitCountFlink04")
     val topic = "sc_md"
 
+
     val myConsumer = new FlinkKafkaConsumer010[String](topic, new SimpleStringSchema(), properties).setStartFromGroupOffsets()
     //指定偏移量
-    //    myConsumer.setStartFromEarliest() //从最早的数据开始
-    myConsumer.setStartFromLatest() //从最新的数据开始
-    val stream = env.addSource(myConsumer).assignTimestampsAndWatermarks(new TimeStampExtractor)
+        myConsumer.setStartFromEarliest() //从最早的数据开始
+//    myConsumer.setStartFromLatest() //从最新的数据开始
+    val stream: DataStream[String] = env.addSource(myConsumer).assignTimestampsAndWatermarks(new TimeStampExtractor)
     //      .assignAscendingTimestamps(jsonParse(_).getOrElse("time", "0").toLong)
     //      .assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor[String](Time.seconds(10)) {
     //        override def extractTimestamp(t: String): Long = {
@@ -82,16 +83,17 @@ object FlinkTableKafkaTest2 {
     val sql = "SELECT v1_message_id,v1_message_title," +
             "utc2local(HOP_START(`time`, INTERVAL '10' SECOND,INTERVAL '1' DAY)) as hStart," +
             "utc2local(HOP_END(`time`, INTERVAL '10' SECOND,INTERVAL '1' DAY)) as hEnd," +
+//            "substring(cast(`time` as VARCHAR ),1,10) AS count_date ," +
             "count(DISTINCT distinct_id) AS countNum " +
             "from live_visit where v1_message_id is not null " +
-            "GROUP BY HOP(`time`,INTERVAL '10' SECOND,INTERVAL '1' DAY),v1_message_id,v1_message_title"
+            "GROUP BY HOP(`time`,INTERVAL '10' SECOND,INTERVAL '1' DAY),v1_message_id,v1_message_title "
 
 
     val table: Table = tableEnv.sqlQuery(sql)
     val result: DataStream[Row] = tableEnv.toAppendStream[Row](table)
     result.print()
     //写入hbase
-//    result.writeUsingOutputFormat(new HBaseRichOutputFormat())
+    result.writeUsingOutputFormat(new HBaseRichOutputFormat()).setParallelism(4)
 
     env.execute("FlinkTableKafkaTest2")
   }

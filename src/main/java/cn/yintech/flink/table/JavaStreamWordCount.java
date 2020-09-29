@@ -1,4 +1,4 @@
-package cn.yintech.table;
+package cn.yintech.flink.table;
 
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;

@@ -11,7 +11,7 @@ class HbaseUtil(getConnect:()=> Connection) extends Serializable {
 
 object HbaseUtil {
   val conf: Configuration = HBaseConfiguration.create
-  conf.set("hbase.zookeeper.quorum", "bigdata002,bigdata003,bigdata004")
+  conf.set("hbase.zookeeper.quorum", "bigdata002.sj.com,bigdata003.sj.com,bigdata004.sj.com")
 //  conf.set("zookeeper.znode.parent", "/hbase-unsecure")
   conf.set("hbase.zookeeper.property.clientPort", "2181")
   conf.setLong("hbase.rpc.timeout", 3000000L)
