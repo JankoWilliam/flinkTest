@@ -1,0 +1,11 @@
+<configuration>
+    # hive元数据服务的地址
+    <property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://bigdata001:9083</value>
+    </property>
+    <property>
+        <name>hive.server2.thrift.port</name>
+        <value>10000</value>
+    </property>
+</configuration>
