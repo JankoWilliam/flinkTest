@@ -4,6 +4,7 @@ import cn.yintech.utils.HbaseUtil
 import org.apache.hadoop.hbase._
 import org.apache.hadoop.hbase.client._
 import org.apache.hadoop.hbase.util.Bytes
+
 object HbaseTest {
   def main(args: Array[String]): Unit = {
     val table: Table = HbaseUtil().connect.getTable(TableName.valueOf("flink_live_visit_count_sink"))

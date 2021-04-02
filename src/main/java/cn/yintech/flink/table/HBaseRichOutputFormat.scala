@@ -27,6 +27,8 @@ class HBaseRichOutputFormat extends RichOutputFormat[Row]{
 //      put.addColumn(Bytes.toBytes("f"),Bytes.toBytes("name"),Bytes.toBytes(d._2))
 //      put
 //    }).toList
+
+
     val rowKey = record.getField(1).toString + "+" + record.getField(0).toString
     val get = new Get(Bytes.toBytes(rowKey))
     get.addColumn("cf1".getBytes, "uv".getBytes)
